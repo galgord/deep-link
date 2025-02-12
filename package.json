@@ -1,6 +1,6 @@
 {
   "name": "deep-link-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "start": "node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
