@@ -1,19 +1,20 @@
 const express = require('express');
 const app = express();
-const expressRouter = express.Router();
-const port = process.env.PORT || 3000;
+
+// Constants
 const APP_SCHEME_IOS = 'presence-copilot-development';
-const APP_STORE_URL = 'https://apps.apple.com/us/app/your-app/id1234567890'; // Replace with your app store URL
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.your.package.name'; // Replace with your play store URL
+const APP_STORE_URL = 'https://apps.apple.com/us/app/your-app/id1234567890';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.your.package.name';
 const APP_SCHEME_ANDROID = 'presence-copilot-development';
+
 // Utility function to encode text for HTML
 const encodeText = (text) => {
   return text
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
-    .replace(/'/g, "'");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 };
 
 // Function to generate the HTML content with dynamic OG tags and app redirect
@@ -205,33 +206,47 @@ const getStyledHtml = (platform, params) => {
     </html>`;
 };
 
-// Mount the router to the app
-app.use('/', expressRouter);
+// Main route handler
+app.get('/', async (req, res) => {
+  try {
+    const userAgent = req.headers['user-agent'] || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+    const isAndroid = /android/i.test(userAgent);
+    const params = req.query;
 
-// Express route handler for deep linking
-expressRouter.get('/', async (req, res) => {
-  const userAgent = req.headers['user-agent'] || '';
-  const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
-  const isAndroid = /android/i.test(userAgent);
-  const params = req.query;
+    console.log('Request received with params:', params, 'User-Agent:', userAgent);
 
-  console.log('Request received with params:', params, 'User-Agent:', userAgent);
+    let platform = '';
 
-  let platform = '';
+    if (isIOS) {
+      platform = 'ios';
+    } else if (isAndroid) {
+      platform = 'android';
+    } else {
+      // For testing purposes, default to iOS if not on mobile
+      platform = 'ios';
+    }
 
-  if (isIOS) {
-    platform = 'ios';
-  } else if (isAndroid) {
-    platform = 'android';
-  } else {
-    // For testing purposes, default to iOS if not on mobile
-    platform = 'ios';
+    const html = getStyledHtml(platform, params);
+    res.send(html);
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('Internal Server Error');
   }
-
-  const html = getStyledHtml(platform, params);
-  res.send(html);
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+
+// Export for Vercel
+module.exports = app;
