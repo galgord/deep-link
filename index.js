@@ -205,6 +205,9 @@ const getStyledHtml = (platform, params) => {
     </html>`;
 };
 
+// Mount the router to the app
+app.use('/', expressRouter);
+
 // Express route handler for deep linking
 expressRouter.get('/', async (req, res) => {
   const userAgent = req.headers['user-agent'] || '';
@@ -212,7 +215,7 @@ expressRouter.get('/', async (req, res) => {
   const isAndroid = /android/i.test(userAgent);
   const params = req.query;
 
-  console.log('Request received at /deep-linking with params:', params, 'User-Agent', userAgent);
+  console.log('Request received with params:', params, 'User-Agent:', userAgent);
 
   let platform = '';
 
@@ -221,8 +224,8 @@ expressRouter.get('/', async (req, res) => {
   } else if (isAndroid) {
     platform = 'android';
   } else {
-    res.send('Unsupported platform. This link is intended for iOS and Android devices.');
-    return;
+    // For testing purposes, default to iOS if not on mobile
+    platform = 'ios';
   }
 
   const html = getStyledHtml(platform, params);

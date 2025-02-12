@@ -6,7 +6,25 @@
     <title>Deep Link App</title>
   </head>
   <body>
-    <h1>Deep Link App is Ready!</h1>
-    <p>Your site is successfully deployed.</p>
+    <div id="content"></div>
+
+    <script>
+      function displayContent() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        const createdBy = urlParams.get('createdBy');
+        const image = urlParams.get('image');
+        const appUrl = urlParams.get('appUrl');
+
+        // Get the styled HTML (assuming getStyledHtml is defined in index.js)
+        const styledHtml = getStyledHtml({ name, createdBy, image, appUrl });
+        
+        // Display the result
+        document.getElementById('content').innerHTML = styledHtml;
+      }
+
+      // Run when page loads
+      window.onload = displayContent;
+    </script>
   </body>
 </html> 
