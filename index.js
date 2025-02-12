@@ -1,62 +1,59 @@
 const express = require('express');
 const app = express();
+const expressRouter = express.Router();
 const port = process.env.PORT || 3000;
-
-// Configuration - Replace with your actual values
 const APP_SCHEME_IOS = 'presence-copilot-development';
-const APP_STORE_URL = 'https://apps.apple.com/us/app/your-app/id1234567890';
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.your.package.name';
+const APP_STORE_URL = 'https://apps.apple.com/us/app/your-app/id1234567890'; // Replace with your app store URL
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.your.package.name'; // Replace with your play store URL
 const APP_SCHEME_ANDROID = 'presence-copilot-development';
-
+// Utility function to encode text for HTML
 const encodeText = (text) => {
-    return text.replace(/&/g, '&')
-               .replace(/</g, '<')
-               .replace(/>/g, '>')
-               .replace(/"/g, '"')
-               .replace(/'/g, "'");
-}
+  return text
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
+    .replace(/'/g, "'");
+};
 
+// Function to generate the HTML content with dynamic OG tags and app redirect
 const getStyledHtml = (platform, params) => {
-    let appUrl = '';
-    let appScheme = '';
+  let appUrl = '';
+  let appScheme = '';
 
-    if (platform === 'ios') {
-        appUrl = APP_STORE_URL;
-        appScheme = APP_SCHEME_IOS;
-    } else if (platform === 'android') {
-        appUrl = PLAY_STORE_URL;
-        appScheme = APP_SCHEME_ANDROID;
-    } else {
-        return 'Unsupported platform.'; // Handle unsupported platforms elsewhere
-    }
+  if (platform === 'ios') {
+    appUrl = APP_STORE_URL;
+    appScheme = APP_SCHEME_IOS;
+  } else if (platform === 'android') {
+    appUrl = PLAY_STORE_URL;
+    appScheme = APP_SCHEME_ANDROID;
+  } else {
+    return 'Unsupported platform.'; // Handle unsupported platforms elsewhere
+  }
 
-    const name = params.name || 'Collaborate';
-    const createdBy = params.createdBy || 'Gian Mancuso';
-    const imageUrl = params.imageUrl || 'https://example.com/default-image.jpg'; // Add imageUrl to params!
-    const appURL =  params.appURL || "https://copilot-staging.app.link"
+  // Extract parameters from the query string
+  const name = params.name;
+  const createdBy = params.createdBy;
+  const imageUrl = params.imageUrl || 'https://via.placeholder.com/150'; // Default image URL
 
-    const deepLink = `${appScheme}://test?${new URLSearchParams(params).toString()}`;
-    console.log("Generated Deep Link:", deepLink);
+  const deepLink = `${appScheme}://deep-linking?${new URLSearchParams(params).toString()}`;
+  console.log('Generated Deep Link:', deepLink);
 
-    const baseUrl = 'http://wgw.luxurycoders.com/test?name=MyProject&createdBy=JohnDoe&imageUrl=https://example.com/my-project-image.jpg&appURL=https://copilot-staging.app.link'; // Replace with your deployed URL
+  // Updated base URL with your domain
+  const baseUrl = 'http://wgw.luxurycoders.com';
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html>
     <head>
         <title>${encodeText(`Collaborate on ${name}`)}</title>
         <meta property="og:title" content="${encodeText(`Collaborate on ${name}`)}">
         <meta property="og:description" content="${encodeText(`Created by ${createdBy}`)}">
         <meta property="og:image" content="${encodeText(imageUrl)}">
-        <meta property="og:url" content="${encodeText(`${baseUrl}/test?${new URLSearchParams(params).toString()}`)}">
+        <meta property="og:url" content="${encodeText(
+          `${baseUrl}?${new URLSearchParams(params).toString()}`
+        )}">
         <meta property="og:type" content="website">
-         <meta property="og:site_name" content="${encodeText("Copilot App")}">
-
-        <!-- Twitter Card Tags -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta property="twitter:title" content="${encodeText(`Collaborate on ${name}`)}">
-        <meta property="twitter:description" content="${encodeText(`Created by ${createdBy}`)}">
-        <meta property="twitter:image" content="${encodeText(imageUrl)}">
-
+        <meta property="og:site_name" content="${encodeText('Copilot App')}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             /* Modern, clean styling inspired by Accept Invite 2.0 */
@@ -180,51 +177,58 @@ const getStyledHtml = (platform, params) => {
         <div class="container">
             <h1>${encodeText(`Collaborate on ${name}`)}</h1>
             <div class="subtitle">Created by ${encodeText(createdBy)}</div>
-            <div class="image-placeholder">Image Placeholder</div>
+            <div class="image-placeholder"><img src="${encodeText(
+              imageUrl
+            )}" alt="Preview Image" style="max-width: 100%; max-height: 100%;"></div>
             <a href="${deepLink}" class="button">Download the iOS App</a>
-            <a href="${encodeText(appURL)}" class="continue-link">Continue in browser</a>
+            <a href="${encodeText(
+              'https://copilot-staging.app.link'
+            )}" class="continue-link">Continue in browser</a>
             <div class="footer">gianmancuso.lp.com</div>
         </div>
 
         <script>
-            function openApp() {
-                window.location.href = "${deepLink}";
-
-                // Optional: Redirect to app store if app doesn't open after a short delay
-                setTimeout(function() {
-                    window.location.href = "${appUrl}";
-                }, 1500); // 1.5 seconds
-            }
-
-            window.onload = openApp;
+         function openApp() {
+            console.log("openApp function called");
+            console.log("Deep link URL:", "${deepLink}");
+            window.location.href = "${deepLink}";
+            setTimeout(function() {
+                console.log("Redirecting to app store after timeout");
+                window.location.href = "${appUrl}";
+            }, 1500);
+        }
+     document.addEventListener('DOMContentLoaded', function() {
+    openApp();
+  });
         </script>
     </body>
     </html>`;
-}
+};
 
-app.get('/test', (req, res) => {
-    const userAgent = req.headers['user-agent'] || '';
-    const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
-    const isAndroid = /android/i.test(userAgent);
-    const params = req.query;
+// Express route handler for deep linking
+expressRouter.get('/', async (req, res) => {
+  const userAgent = req.headers['user-agent'] || '';
+  const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+  const isAndroid = /android/i.test(userAgent);
+  const params = req.query;
 
-    console.log("Request received at /test with params:", params, "User-Agent", userAgent);
+  console.log('Request received at /deep-linking with params:', params, 'User-Agent', userAgent);
 
-    let platform = '';
+  let platform = '';
 
-    if (isIOS) {
-        platform = 'ios';
-    } else if (isAndroid) {
-        platform = 'android';
-    } else {
-        res.send('Unsupported platform. This link is intended for iOS and Android devices.');
-        return;
-    }
+  if (isIOS) {
+    platform = 'ios';
+  } else if (isAndroid) {
+    platform = 'android';
+  } else {
+    res.send('Unsupported platform. This link is intended for iOS and Android devices.');
+    return;
+  }
 
-    const html = getStyledHtml(platform, params);
-    res.send(html);
+  const html = getStyledHtml(platform, params);
+  res.send(html);
 });
 
 app.listen(port, () => {
-    console.log(`Deep Link app running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
