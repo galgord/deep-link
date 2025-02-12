@@ -9,7 +9,8 @@ const APP_SCHEME_ANDROID = 'presence-copilot-development';
 
 // Utility function to encode text for HTML
 const encodeText = (text) => {
-  return text
+  if (!text) return '';
+  return String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -32,10 +33,10 @@ const getStyledHtml = (platform, params) => {
     return 'Unsupported platform.'; // Handle unsupported platforms elsewhere
   }
 
-  // Extract parameters from the query string
-  const name = params.name;
-  const createdBy = params.createdBy;
-  const imageUrl = params.imageUrl || 'https://via.placeholder.com/150'; // Default image URL
+  // Extract and sanitize parameters from the query string
+  const name = params.name || 'Project';
+  const createdBy = params.createdBy || 'Unknown';
+  const imageUrl = params.imageUrl || 'https://via.placeholder.com/150';
 
   const deepLink = `${appScheme}://deep-linking?${new URLSearchParams(params).toString()}`;
   console.log('Generated Deep Link:', deepLink);
@@ -46,7 +47,7 @@ const getStyledHtml = (platform, params) => {
   return `<!DOCTYPE html>
     <html>
     <head>
-        <title>${encodeText(`Collaborate on ${name}`)}</title>
+        <title>${encodeText(name)}</title>
         <meta property="og:title" content="${encodeText(`Collaborate on ${name}`)}">
         <meta property="og:description" content="${encodeText(`Created by ${createdBy}`)}">
         <meta property="og:image" content="${encodeText(imageUrl)}">
@@ -176,7 +177,7 @@ const getStyledHtml = (platform, params) => {
     </head>
     <body>
         <div class="container">
-            <h1>${encodeText(`Collaborate on ${name}`)}</h1>
+            <h1>${encodeText(name)}</h1>
             <div class="subtitle">Created by ${encodeText(createdBy)}</div>
             <div class="image-placeholder"><img src="${encodeText(
               imageUrl
@@ -212,7 +213,7 @@ app.get('/', async (req, res) => {
     const userAgent = req.headers['user-agent'] || '';
     const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
     const isAndroid = /android/i.test(userAgent);
-    const params = req.query;
+    const params = req.query || {};  // Ensure params is an object
 
     console.log('Request received with params:', params, 'User-Agent:', userAgent);
 
@@ -223,8 +224,7 @@ app.get('/', async (req, res) => {
     } else if (isAndroid) {
       platform = 'android';
     } else {
-      // For testing purposes, default to iOS if not on mobile
-      platform = 'ios';
+      platform = 'ios';  // Default to iOS for testing
     }
 
     const html = getStyledHtml(platform, params);
