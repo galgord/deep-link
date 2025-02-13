@@ -37,32 +37,26 @@ const getStyledHtml = (platform, params = {}) => {
     return `<!DOCTYPE html>
     <html prefix="og: https://ogp.me/ns#">
     <head>
-        <title>Collaborate on Project</title>
+        <title>Home search Hinsdale</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!-- Basic Meta Tags -->
-        <meta name="description" content="Created by Copilot">
+        <meta name="description" content="Join me on the app to collaborate, stay updated about listings, and more.">
         
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://deep-link-app.vercel.app/">
-        <meta property="og:title" content="Collaborate on Project">
-        <meta property="og:description" content="Created by Copilot">
-        <meta property="og:image" content="https://i.imgur.com/rN1iM4Y.jpg">
-        <meta property="og:image:secure_url" content="https://i.imgur.com/rN1iM4Y.jpg">
-        <meta property="og:image:type" content="image/jpeg">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:site_name" content="Copilot App">
+        <meta property="og:title" content="Home search Hinsdale">
+        <meta property="og:description" content="Join me on the app to collaborate, stay updated about listings, and more.">
+        <meta property="og:image" content="${params.imageUrl || 'https://i.imgur.com/rN1iM4Y.jpg'}">
+        <meta property="og:site_name" content="copilot-staging.test-app.link">
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:domain" content="deep-link-app.vercel.app">
-        <meta name="twitter:url" content="https://deep-link-app.vercel.app/">
-        <meta name="twitter:title" content="Collaborate on Project">
-        <meta name="twitter:description" content="Created by Copilot">
-        <meta name="twitter:image" content="https://i.imgur.com/rN1iM4Y.jpg">
+        <meta name="twitter:title" content="Home search Hinsdale">
+        <meta name="twitter:description" content="Join me on the app to collaborate, stay updated about listings, and more.">
+        <meta name="twitter:image" content="${params.imageUrl || 'https://i.imgur.com/rN1iM4Y.jpg'}">
         
         <style>
             body {
