@@ -23,132 +23,184 @@ const getStyledHtml = (platform, params = {}) => {
       appScheme = APP_SCHEME_ANDROID;
     }
 
-    // Extract and sanitize parameters from the query string
     const name = params.name || 'Project';
     const createdBy = params.createdBy || 'Unknown';
-    const imageUrl = params.imageUrl || 'https://via.placeholder.com/150';
-
+    const imageUrl = params.imageUrl || 'https://res.cloudinary.com/luxuryp/image/upload/v1704842104/background_ilux52.png';
+    const avatarUrl = params.avatarUrl || 'https://i.pravatar.cc/150?img=48';
     const deepLink = `${appScheme}://deep-linking?${new URLSearchParams(Object.entries(params)).toString()}`;
-    console.log('Generated Deep Link:', deepLink);
-
-    // Updated base URL with your domain
-    const baseUrl = 'http://wgw.luxurycoders.com';
 
     return `<!DOCTYPE html>
-    <html prefix="og: https://ogp.me/ns#">
+    <html>
     <head>
-        <title>Home search Hinsdale</title>
-        <meta charset="utf-8">
+        <meta name="deepview-service" content="deepview-service">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:700,300" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
         
-        <!-- Basic Meta Tags -->
-        <meta name="description" content="Join me on the app to collaborate, stay updated about listings, and more.">
-        
-        <!-- Open Graph / Facebook -->
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://deep-link-app.vercel.app/">
-        <meta property="og:title" content="Home search Hinsdale">
-        <meta property="og:description" content="Join me on the app to collaborate, stay updated about listings, and more.">
-        <meta property="og:image" content="${params.imageUrl || 'https://i.imgur.com/rN1iM4Y.jpg'}">
+        <!-- Meta tags -->
+        <meta property="og:title" content="${name}">
+        <meta property="og:description" content="Created by ${createdBy}">
+        <meta property="og:image" content="${imageUrl}">
         <meta property="og:site_name" content="copilot-staging.test-app.link">
-
-        <!-- Twitter -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Home search Hinsdale">
-        <meta name="twitter:description" content="Join me on the app to collaborate, stay updated about listings, and more.">
-        <meta name="twitter:image" content="${params.imageUrl || 'https://i.imgur.com/rN1iM4Y.jpg'}">
         
         <style>
             body {
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
                 margin: 0;
-                padding: 0;
-                background-color: #f5f5f7;
-                color: #1c1c1e;
-                text-align: center;
+                word-wrap: break-word;
+                padding: 0px;
+                align-items: center;
+                justify-content: center;
+                background-color: #000;
+            }
+            
+            .main-image {
+                background-image: url(${imageUrl});
+                background-size: cover;
+                height: 80vw;
+            }
+            
+            .blurred-image {
+                background-image: url(${imageUrl});
+                background-size: cover;
+                background-repeat: no-repeat;
+                height: 50%;
+                width: 100%;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: scaleY(-1);
+                opacity: 30%;
+                filter: blur(100px);
+                z-index: -99;
+            }
+            
+            .avatar {
+                vertical-align: middle;
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                margin-top: 22px;
+                margin-bottom: 16px;
+            }
+            
+            #content-container {
+                margin-top: 48px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-            }
-
-            .container {
-                background-color: #fff;
-                border-radius: 16px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-                padding: 40px;
-                max-width: 400px;
-                width: 90%;
-                margin: 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-                font-weight: 600;
-                margin-bottom: 10px;
-                color: #1c1c1e;
-            }
-
-            .subtitle {
-                font-size: 1.1em;
-                color: #666;
-                margin-bottom: 30px;
-            }
-
-            .creator {
-                font-size: 0.9em;
-                color: #888;
-                margin-bottom: 40px;
-            }
-
-            .button {
-                display: inline-block;
-                padding: 14px 28px;
-                background-color: #007aff;
-                color: #fff;
-                text-decoration: none;
-                border-radius: 12px;
-                font-size: 1em;
-                font-weight: 500;
-                transition: background-color 0.3s ease;
+                bottom: 0px;
                 width: 100%;
-                box-sizing: border-box;
-                text-align: center;
-                margin-bottom: 15px;
             }
-
-            .footer {
-                margin-top: 30px;
-                font-size: 0.8em;
-                color: #888;
+            
+            .card-title {
+                text-align: center;
+                margin: 0px;
+                font-size: 24px;
+                color: #FFF;
+                margin-bottom: 16px;
+            }
+            
+            .app-content {
+                margin-top: 16px;
+                margin-bottom: 40px;
+                color: #C4C4C4;
+                text-align: center;
+                font-family: Inter;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 16px;
+            }
+            
+            .input-wrapper {
+                width: 100%;
+                flex: 1;
+                display: flex;
+                align-items: flex-end;
+                padding-bottom: 20px;
+            }
+            
+            .input-container {
+                width: 100%;
+                padding: 0 24px;
+                text-align: center;
+                box-sizing: border-box;
+            }
+            
+            .cta-button {
+                display: block;
+                height: 62px;
+                line-height: 62px;
+                background-color: #FFF;
+                border-radius: 100px;
+                font-size: 20px;
+                color: #000;
+                text-align: center;
+                text-decoration: none;
+                margin-bottom: 20px;
+            }
+            
+            .link-container {
+                margin-top: 20px;
+            }
+            
+            .link {
+                font-size: 18px;
+                font-weight: 600;
+                padding-top: 20px;
+                color: #FFF;
+                text-decoration: none;
+            }
+            
+            @media only screen and (orientation: landscape) {
+                .main-image {
+                    position: fixed;
+                    height: 100vh;
+                    width: 50%;
+                }
+                
+                #content-container {
+                    float: left;
+                    width: 50%;
+                    margin-left: 50%;
+                }
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1>Collaborate on Project</h1>
-            <div class="subtitle">Created by Copilot</div>
-            <div class="image-placeholder">
-                <img src="https://via.placeholder.com/150" alt="Preview Image" style="max-width: 100%; max-height: 100%;">
+        <div class="card center">
+            <div class="main-image"></div>
+            <div class="blurred-image"></div>
+            <div id="content-container">
+                <div><img class="avatar" src="${avatarUrl}"></div>
+                <h4 class="card-title" style="margin-bottom:4px">Collaborate on</h4>
+                <h4 class="card-title">${name}</h4>
+                <div class="app-content">Created by ${createdBy}</div>
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <form class="form-get-the-app">
+                            <a href="${deepLink}" class="cta-button">Get the App</a>
+                            <div class="link-container">
+                                <a href="https://copilot-staging.app.link" class="link">Continue in browser</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <a href="${deepLink}" class="button">Open in App</a>
-            <div class="footer">gianmancuso.lp.com</div>
         </div>
-
+        
         <script>
-         function openApp() {
-            console.log("openApp function called");
-            console.log("Deep link URL:", "${deepLink}");
-            window.location.href = "${deepLink}";
-            setTimeout(function() {
-                console.log("Redirecting to app store after timeout");
-                window.location.href = "${appUrl}";
-            }, 1500);
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            openApp();
-        });
+            function openApp() {
+                console.log("openApp function called");
+                console.log("Deep link URL:", "${deepLink}");
+                window.location.href = "${deepLink}";
+                setTimeout(function() {
+                    console.log("Redirecting to app store after timeout");
+                    window.location.href = "${appUrl}";
+                }, 1500);
+            }
+            document.addEventListener('DOMContentLoaded', function() {
+                openApp();
+            });
         </script>
     </body>
     </html>`;
