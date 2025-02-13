@@ -41,19 +41,28 @@ const getStyledHtml = (platform, params = {}) => {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <!-- Open Graph / Social Media -->
+        <!-- Basic Meta Tags -->
+        <meta name="description" content="Created by Copilot">
+        
+        <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://deep-link-app.vercel.app">
+        <meta property="og:url" content="https://deep-link-app.vercel.app/">
         <meta property="og:title" content="Collaborate on Project">
         <meta property="og:description" content="Created by Copilot">
-        <meta property="og:image" content="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1200&h=630&fit=crop">
+        <meta property="og:image" content="https://i.imgur.com/rN1iM4Y.jpg">
+        <meta property="og:image:secure_url" content="https://i.imgur.com/rN1iM4Y.jpg">
+        <meta property="og:image:type" content="image/jpeg">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:site_name" content="Copilot App">
 
-        <!-- Twitter specific -->
+        <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1200&h=630&fit=crop">
+        <meta name="twitter:domain" content="deep-link-app.vercel.app">
+        <meta name="twitter:url" content="https://deep-link-app.vercel.app/">
+        <meta name="twitter:title" content="Collaborate on Project">
+        <meta name="twitter:description" content="Created by Copilot">
+        <meta name="twitter:image" content="https://i.imgur.com/rN1iM4Y.jpg">
         
         <style>
             body {
@@ -158,6 +167,11 @@ const getStyledHtml = (platform, params = {}) => {
 // Main route handler
 app.get('/', async (req, res) => {
   try {
+    // Add these headers
+    res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.header('Pragma', 'no-cache');
+    res.header('Expires', '0');
+
     console.log('Incoming request:', {
       query: req.query,
       headers: req.headers,
