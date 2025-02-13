@@ -40,7 +40,7 @@ const getStyledHtml = (platform, params = {}) => {
         <title>Collaborate on Project</title>
         <meta property="og:title" content="Collaborate on Project">
         <meta property="og:description" content="Created by Copilot">
-        <meta property="og:image" content="https://via.placeholder.com/150">
+        <meta property="og:image" content="https://picsum.photos/200/300">
         <meta property="og:url" content="${baseUrl}">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="Copilot App">
