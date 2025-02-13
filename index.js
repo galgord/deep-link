@@ -35,16 +35,26 @@ const getStyledHtml = (platform, params = {}) => {
     const baseUrl = 'http://wgw.luxurycoders.com';
 
     return `<!DOCTYPE html>
-    <html>
+    <html prefix="og: https://ogp.me/ns#">
     <head>
         <title>Collaborate on Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Open Graph / Social Media -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://deep-link-app.vercel.app">
         <meta property="og:title" content="Collaborate on Project">
         <meta property="og:description" content="Created by Copilot">
-        <meta property="og:image" content="https://fastly.picsum.photos/id/112/200/300.jpg">
-        <meta property="og:url" content="${baseUrl}">
-        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1200&h=630&fit=crop">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
         <meta property="og:site_name" content="Copilot App">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Twitter specific -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1200&h=630&fit=crop">
+        
         <style>
             body {
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
