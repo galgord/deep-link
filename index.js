@@ -41,7 +41,7 @@ const getStyledHtml = (platform, params = {}) => {
         <meta property="og:title" content="${name}">
         <meta property="og:description" content="Created by ${createdBy}">
         <meta property="og:image" content="${imageUrl}">
-        <meta property="og:site_name" content="copilot-staging.test-app.link">
+        <meta property="og:site_name" content="Collaboration Invite">
         
         <style>
             body {
@@ -213,11 +213,6 @@ const getStyledHtml = (platform, params = {}) => {
 // Main route handler
 app.get('/', async (req, res) => {
   try {
-    // Add these headers
-    res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.header('Pragma', 'no-cache');
-    res.header('Expires', '0');
-
     console.log('Incoming request:', {
       query: req.query,
       headers: req.headers,
