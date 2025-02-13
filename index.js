@@ -7,22 +7,6 @@ const APP_STORE_URL = 'https://apps.apple.com/us/app/your-app/id1234567890';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.your.package.name';
 const APP_SCHEME_ANDROID = 'presence-copilot-development';
 
-// Utility function to encode text for HTML
-const encodeText = (text) => {
-  try {
-    if (text === undefined || text === null) return '';
-    return String(text)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  } catch (error) {
-    console.error('Error in encodeText:', error);
-    return '';
-  }
-};
-
 // Function to generate the HTML content with dynamic OG tags and app redirect
 const getStyledHtml = (platform, params = {}) => {
   try {
@@ -51,166 +35,110 @@ const getStyledHtml = (platform, params = {}) => {
     const baseUrl = 'http://wgw.luxurycoders.com';
 
     return `<!DOCTYPE html>
-      <html>
-      <head>
-          <title>${encodeText(name)}</title>
-          <meta property="og:title" content="${encodeText(`Collaborate on ${name}`)}">
-          <meta property="og:description" content="${encodeText(`Created by ${createdBy}`)}">
-          <meta property="og:image" content="${encodeText(imageUrl)}">
-          <meta property="og:url" content="${encodeText(
-            `${baseUrl}?${new URLSearchParams(params).toString()}`
-          )}">
-          <meta property="og:type" content="website">
-          <meta property="og:site_name" content="${encodeText('Copilot App')}">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-              /* Modern, clean styling inspired by Accept Invite 2.0 */
-              body {
-                  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                  margin: 0;
-                  padding: 0;
-                  background-color: #f5f5f7; /* Light gray background */
-                  color: #1c1c1e; /* Dark text */
-                  text-align: center;
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  justify-content: center;
-                  min-height: 100vh;
-              }
+    <html>
+    <head>
+        <title>Collaborate on Project</title>
+        <meta property="og:title" content="Collaborate on Project">
+        <meta property="og:description" content="Created by Copilot">
+        <meta property="og:image" content="https://via.placeholder.com/150">
+        <meta property="og:url" content="${baseUrl}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Copilot App">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f7;
+                color: #1c1c1e;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+            }
 
-              .container {
-                  background-color: #fff;
-                  border-radius: 16px;
-                  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-                  padding: 40px;
-                  max-width: 400px;
-                  width: 90%;
-                  margin: 20px;
-              }
+            .container {
+                background-color: #fff;
+                border-radius: 16px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+                padding: 40px;
+                max-width: 400px;
+                width: 90%;
+                margin: 20px;
+            }
 
-              h1 {
-                  font-size: 1.8em;
-                  font-weight: 600;
-                  margin-bottom: 10px;
-                  color: #1c1c1e;
-              }
+            h1 {
+                font-size: 1.8em;
+                font-weight: 600;
+                margin-bottom: 10px;
+                color: #1c1c1e;
+            }
 
-              .subtitle {
-                  font-size: 1.1em;
-                  color: #666;
-                  margin-bottom: 30px;
-              }
+            .subtitle {
+                font-size: 1.1em;
+                color: #666;
+                margin-bottom: 30px;
+            }
 
-              .creator {
-                  font-size: 0.9em;
-                  color: #888;
-                  margin-bottom: 40px;
-              }
+            .creator {
+                font-size: 0.9em;
+                color: #888;
+                margin-bottom: 40px;
+            }
 
-              .image-placeholder {
-                  width: 100%;
-                  height: 150px;
-                  background-color: #e0e0e0;
-                  border-radius: 12px;
-                  margin-bottom: 30px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  color: #888;
-                  font-size: 1em;
-              }
+            .button {
+                display: inline-block;
+                padding: 14px 28px;
+                background-color: #007aff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 12px;
+                font-size: 1em;
+                font-weight: 500;
+                transition: background-color 0.3s ease;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+                margin-bottom: 15px;
+            }
 
-              .button {
-                  display: inline-block;
-                  padding: 14px 28px;
-                  background-color: #007aff; /* iOS blue */
-                  color: #fff;
-                  text-decoration: none;
-                  border-radius: 12px;
-                  font-size: 1em;
-                  font-weight: 500;
-                  transition: background-color 0.3s ease;
-                  width: 100%;
-                  box-sizing: border-box;
-                  text-align: center;
-                  margin-bottom: 15px;
-              }
+            .footer {
+                margin-top: 30px;
+                font-size: 0.8em;
+                color: #888;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Collaborate on Project</h1>
+            <div class="subtitle">Created by Copilot</div>
+            <div class="image-placeholder">
+                <img src="https://via.placeholder.com/150" alt="Preview Image" style="max-width: 100%; max-height: 100%;">
+            </div>
+            <a href="${deepLink}" class="button">Open in App</a>
+            <div class="footer">gianmancuso.lp.com</div>
+        </div>
 
-              .button:hover {
-                  background-color: #0063cc; /* Darker blue */
-              }
-
-              .continue-link {
-                  display: inline-block;
-                  color: #007aff;
-                  text-decoration: none;
-                  font-weight: 500;
-                  font-size: 0.9em;
-              }
-
-              .continue-link:hover {
-                  text-decoration: underline;
-              }
-
-              .footer {
-                  margin-top: 30px;
-                  font-size: 0.8em;
-                  color: #888;
-              }
-
-              /* Add some spacing for mobile */
-              @media (max-width: 600px) {
-                  .container {
-                      padding: 30px;
-                      margin: 10px;
-                  }
-
-                  h1 {
-                      font-size: 1.5em;
-                  }
-
-                  .subtitle {
-                      font-size: 1em;
-                  }
-
-                  .button {
-                      padding: 12px 24px;
-                      font-size: 0.9em;
-                  }
-              }
-          </style>
-      </head>
-      <body>
-          <div class="container">
-              <h1>${encodeText(name)}</h1>
-              <div class="subtitle">Created by ${encodeText(createdBy)}</div>
-              <div class="image-placeholder"><img src="${encodeText(
-                imageUrl
-              )}" alt="Preview Image" style="max-width: 100%; max-height: 100%;"></div>
-              <a href="${deepLink}" class="button">Download the iOS App</a>
-              <a href="${encodeText(
-                'https://copilot-staging.app.link'
-              )}" class="continue-link">Continue in browser</a>
-              <div class="footer">gianmancuso.lp.com</div>
-          </div>
-
-          <script>
-           function openApp() {
-              console.log("openApp function called");
-              console.log("Deep link URL:", "${deepLink}");
-              window.location.href = "${deepLink}";
-              setTimeout(function() {
-                  console.log("Redirecting to app store after timeout");
-                  window.location.href = "${appUrl}";
-              }, 1500);
-          }
-       document.addEventListener('DOMContentLoaded', function() {
-      openApp();
-    });
-          </script>
-      </body>
-      </html>`;
+        <script>
+         function openApp() {
+            console.log("openApp function called");
+            console.log("Deep link URL:", "${deepLink}");
+            window.location.href = "${deepLink}";
+            setTimeout(function() {
+                console.log("Redirecting to app store after timeout");
+                window.location.href = "${appUrl}";
+            }, 1500);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            openApp();
+        });
+        </script>
+    </body>
+    </html>`;
   } catch (error) {
     console.error('Error in getStyledHtml:', error);
     return 'An error occurred while generating the page.';
